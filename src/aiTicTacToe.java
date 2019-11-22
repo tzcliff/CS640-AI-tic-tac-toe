@@ -2,6 +2,7 @@ import java.util.*;
 public class aiTicTacToe {
 
 	public int player; //1 for player 1 and 2 for player 2
+	private List<List<positionTicTacToe>> winningLines;
 	private int getStateOfPositionFromBoard(positionTicTacToe position, List<positionTicTacToe> board)
 	{
 		//a helper function to get state of a certain position in the Tic-Tac-Toe board by given position TicTacToe
@@ -12,6 +13,10 @@ public class aiTicTacToe {
 	{
 		//TODO: this is where you are going to implement your AI algorithm to win the game. The default is an AI randomly choose any available move.
 		positionTicTacToe myNextMove = new positionTicTacToe(0,0,0);
+		winningLines = initializeWinningLines();
+
+
+
 		
 		do
 			{
@@ -164,5 +169,87 @@ public class aiTicTacToe {
 	public aiTicTacToe(int setPlayer)
 	{
 		player = setPlayer;
+	}
+
+	private int caculateWinningLines(List<positionTicTacToe> board, int player) {
+
+		int opponent;
+
+		if(player == 1) {
+			opponent = 2;
+		} else {
+			opponent = 1;
+		}
+
+		int numberOfWinningLines = 0;
+
+		for (int i=0;i<winningLines.size();i++)
+		{
+
+			positionTicTacToe p0 = winningLines.get(i).get(0);
+			positionTicTacToe p1 = winningLines.get(i).get(1);
+			positionTicTacToe p2 = winningLines.get(i).get(2);
+			positionTicTacToe p3 = winningLines.get(i).get(3);
+
+			int state0 = getStateOfPositionFromBoard(p0,board);
+			int state1 = getStateOfPositionFromBoard(p1,board);
+			int state2 = getStateOfPositionFromBoard(p2,board);
+			int state3 = getStateOfPositionFromBoard(p3,board);
+
+			//if they have the same state (marked by same player) and they are not all marked.
+			if (state0 == player || state1 == player || state2 == player || state3 == player ) {
+				if(state0 != opponent && state1 != opponent && state2 != opponent && state3 != opponent )
+				{
+					numberOfWinningLines++;
+				}
+			}
+
+		}
+		return numberOfWinningLines;
+	}
+
+	private boolean isTerminalNode(List<positionTicTacToe> board)
+	{
+		//test whether the current game is ended
+
+		//brute-force
+		for(int i=0;i<winningLines.size();i++)
+		{
+
+			positionTicTacToe p0 = winningLines.get(i).get(0);
+			positionTicTacToe p1 = winningLines.get(i).get(1);
+			positionTicTacToe p2 = winningLines.get(i).get(2);
+			positionTicTacToe p3 = winningLines.get(i).get(3);
+
+			int state0 = getStateOfPositionFromBoard(p0,board);
+			int state1 = getStateOfPositionFromBoard(p1,board);
+			int state2 = getStateOfPositionFromBoard(p2,board);
+			int state3 = getStateOfPositionFromBoard(p3,board);
+
+			//if they have the same state (marked by same player) and they are not all marked.
+			if(state0 == state1 && state1 == state2 && state2 == state3 && state0!=0)
+			{
+
+
+
+				return true;
+			}
+		}
+		for(int i=0;i<board.size();i++)
+		{
+			if(board.get(i).state==0)
+			{
+				//game is not ended, continue
+				return false;
+			}
+		}
+		return true; //call it a draw
+	}
+
+	private int alphabeta (List<positionTicTacToe> node, int depth, int a, int b, boolean maximizingPlayer) {
+
+		if(depth == 0 || isTerminalNode(node) ) {
+			return caculateWinningLines(node, )
+		}
 	}
 }
