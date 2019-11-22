@@ -3,6 +3,7 @@ public class aiTicTacToe {
 
 	public int player; //1 for player 1 and 2 for player 2
 	private List<List<positionTicTacToe>> winningLines;
+	private int index;
 	private int getStateOfPositionFromBoard(positionTicTacToe position, List<positionTicTacToe> board)
 	{
 		//a helper function to get state of a certain position in the Tic-Tac-Toe board by given position TicTacToe
@@ -12,12 +13,34 @@ public class aiTicTacToe {
 	public positionTicTacToe myAIAlgorithm(List<positionTicTacToe> board, int player)
 	{
 		//TODO: this is where you are going to implement your AI algorithm to win the game. The default is an AI randomly choose any available move.
-		positionTicTacToe myNextMove = new positionTicTacToe(0,0,0);
-		winningLines = initializeWinningLines();
+		//positionTicTacToe myNextMove = new positionTicTacToe(0,0,0);
+		index = 0;
+		alphabeta(board, 4, -999, 999, true, player);
+		positionTicTacToe myNextMove = indexToPosition(index);
+
 
 
 
 		
+//		do
+//			{
+//				Random rand = new Random();
+//				int x = rand.nextInt(4);
+//				int y = rand.nextInt(4);
+//				int z = rand.nextInt(4);
+//				myNextMove = new positionTicTacToe(x,y,z);
+//			}while(getStateOfPositionFromBoard(myNextMove,board)!=0);
+//		return myNextMove;
+
+		return myNextMove;
+
+
+			
+		
+	}
+
+	public positionTicTacToe myAIAlgorithmRandom(List<positionTicTacToe> board, int player) {
+		positionTicTacToe myNextMove = new positionTicTacToe(0,0,0);
 		do
 			{
 				Random rand = new Random();
@@ -27,9 +50,9 @@ public class aiTicTacToe {
 				myNextMove = new positionTicTacToe(x,y,z);
 			}while(getStateOfPositionFromBoard(myNextMove,board)!=0);
 		return myNextMove;
-			
-		
 	}
+
+
 	private List<List<positionTicTacToe>> initializeWinningLines()
 	{
 		//create a list of winning line so that the game will "brute-force" check if a player satisfied any 	winning condition(s).
@@ -168,6 +191,7 @@ public class aiTicTacToe {
 	}
 	public aiTicTacToe(int setPlayer)
 	{
+		winningLines = initializeWinningLines();
 		player = setPlayer;
 	}
 
@@ -246,10 +270,86 @@ public class aiTicTacToe {
 		return true; //call it a draw
 	}
 
-	private int alphabeta (List<positionTicTacToe> node, int depth, int a, int b, boolean maximizingPlayer) {
+	private List<positionTicTacToe> deepCopyATicTacToeBoard(List<positionTicTacToe> board)
+	{
+		//deep copy of game boards
+		List<positionTicTacToe> copiedBoard = new ArrayList<positionTicTacToe>();
+		for(int i=0;i<board.size();i++)
+		{
+			copiedBoard.add(new positionTicTacToe(board.get(i).x,board.get(i).y,board.get(i).z,board.get(i).state));
+		}
+		return copiedBoard;
+	}
 
+	private int alphabeta (List<positionTicTacToe> node, int depth, int a, int b, boolean maximizingPlayer, int player) {
+		int value;
+
+		int opponent;
+
+
+		if(player == 1) {
+			opponent = 2;
+		} else {
+			opponent = 1;
+		}
 		if(depth == 0 || isTerminalNode(node) ) {
-			return caculateWinningLines(node, )
+			return caculateWinningLines(node, player);
+		}
+
+		if(maximizingPlayer) {
+			value = -999;
+			for (int i = 0; i < node.size(); i++) {
+				if (node.get(i).state == 0) {
+					List<positionTicTacToe> child = deepCopyATicTacToeBoard(node);
+					child.get(i).state = player;
+					//value = Math.max(value, alphabeta(child, depth-1, a, b, false, opponent));
+					int newValue = alphabeta(child, depth-1, a, b, false, opponent);
+					if (newValue > value) {
+						value = newValue;
+						index = i;
+
+					}
+					a = Math.max(a, value);
+					if (a >= b) {
+						break;
+					}
+				}
+
+			}
+			return value;
+		}
+		else {
+			value = 999;
+			for (int i = 0; i < node.size(); i++) {
+				if (node.get(i).state == 0) {
+					List<positionTicTacToe> child = deepCopyATicTacToeBoard(node);
+					child.get(i).state = player;
+					value = Math.min(value, alphabeta(child, depth-1, a, b, true, opponent));
+//					int newValue = alphabeta(child, depth-1, a, b, true, opponent);
+//					if (newValue < value) {
+//						value = newValue;
+//						index = i;
+//
+//					}
+					b = Math.min(b, value);
+					if (a >= b) {
+						break;
+					}
+				}
+
+			}
+			return value;
+
 		}
 	}
+
+	private positionTicTacToe indexToPosition (int index) {
+			int x = index / 16;
+			int y = (index % 16) / 4;
+			int z = (index % 16) % 4;
+
+			return new positionTicTacToe(x, y, z);
+	}
+
+
 }

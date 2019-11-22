@@ -332,7 +332,7 @@ public class runTicTacToe {
 			}
 			else if(turn==2)
 			{
-				positionTicTacToe player2NextMove = ai2.myAIAlgorithm(board,2); //2 stands for player 2
+				positionTicTacToe player2NextMove = ai2.myAIAlgorithmRandom(board,2); //2 stands for player 2
 				if(makeMove(player2NextMove,2,board))
 					turn = 1;
 			}
