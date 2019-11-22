@@ -2,6 +2,58 @@ import java.util.*;
 public class aiTicTacToe {
 
 	public int player; //1 for player 1 and 2 for player 2
+
+	public int miniMax(List<positionTicTacToe> board, int depth, int alpha, int beta, boolean maxTurn){
+		if(depth == 0){
+			if(maxTurn == true){
+				// 3 nodes in a row
+				// opponent 3 node3 in row
+				// 2 nodes in  a row
+				// Strong points
+				return 0;
+			}
+			else{
+				// 3 nodes in a row
+				return 0;
+			}
+		}
+		if(maxTurn){
+			int max = Integer.MIN_VALUE;
+			for(int index = 0; index < board.size(); index++){
+				if(board.get(index).state == 0){
+					List<positionTicTacToe> newBoard = new ArrayList<>(board);
+					newBoard.get(index).state = player;
+					int eval = miniMax(newBoard, depth - 1, alpha, beta, false);
+					max = Math.max(max, eval);
+					alpha = Math.max(alpha, eval);
+					if(beta <= alpha) {
+						break;
+					}
+				}
+			}
+			return max;
+		}
+		else{
+			int min = Integer.MAX_VALUE;
+			for(int index = 0; index < board.size(); index++){
+				if(board.get(index).state == 0) {
+					List<positionTicTacToe> newBoard = new ArrayList<>(board);
+					newBoard.get(index).state = player == 1 ? 2 : 1;
+					int eval = miniMax(newBoard, depth - 1, alpha, beta, true);
+					min = Math.min(min, eval);
+					beta = Math.min(beta, eval);
+					if(beta <= alpha){
+						break;
+					}
+
+				}
+			}
+			return min;
+		}
+
+	}
+
+
 	private int getStateOfPositionFromBoard(positionTicTacToe position, List<positionTicTacToe> board)
 	{
 		//a helper function to get state of a certain position in the Tic-Tac-Toe board by given position TicTacToe
@@ -22,8 +74,6 @@ public class aiTicTacToe {
 				myNextMove = new positionTicTacToe(x,y,z);
 			}while(getStateOfPositionFromBoard(myNextMove,board)!=0);
 		return myNextMove;
-			
-		
 	}
 	private List<List<positionTicTacToe>> initializeWinningLines()
 	{
