@@ -304,11 +304,14 @@ public class runTicTacToe {
 			{
 				if(targetBoard.get(i).state==0)
 				{
+					System.out.println(targetBoard.get(i).state);
+
 					targetBoard.get(i).state = player;
 					return true;
 				}
 				else
 				{
+					System.out.println(targetBoard.get(i).state);
 					System.out.println("Error: this is not a valid move.");
 				}
 			}
@@ -321,13 +324,17 @@ public class runTicTacToe {
 
 		Random rand = new Random();
 		int turn = rand.nextInt(2)+1; //1 = player1's turn, 2 = player2's turn, who go first is randomized 
-		
+
+
 		while((result = isEnded())==0) //game loop
 		{
 			if(turn==1)
 			{
-				positionTicTacToe player1NextMove = ai1.myAIAlgorithm(board,1); //1 stands for player 1
+				printBoardTicTacToe(board);
+				positionTicTacToe player1NextMove = ai1.myAIAlgorithm1(board,1); //1 stands for player 1
+				printBoardTicTacToe(board);
 				if(makeMove(player1NextMove,1,board))
+					printBoardTicTacToe(board);
 					turn = 2;
 			}
 			else if(turn==2)
@@ -335,6 +342,7 @@ public class runTicTacToe {
 				positionTicTacToe player2NextMove = ai2.myAIAlgorithm(board,2); //2 stands for player 2
 				if(makeMove(player2NextMove,2,board))
 					turn = 1;
+
 			}
 			else 
 			{
