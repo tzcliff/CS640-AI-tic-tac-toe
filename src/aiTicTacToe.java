@@ -15,7 +15,7 @@ public class aiTicTacToe {
 		//TODO: this is where you are going to implement your AI algorithm to win the game. The default is an AI randomly choose any available move.
 		//positionTicTacToe myNextMove = new positionTicTacToe(0,0,0);
 		index = 0;
-		alphabeta(board, 5, -999, 999, true, player);
+		alphabeta(board, 4, -999, 999, true, player);
 		positionTicTacToe myNextMove = indexToPosition(index);
 
 		return myNextMove;
@@ -282,11 +282,14 @@ public class aiTicTacToe {
 			return caculateWinningLines(node, player);
 		}
         int temp = isTerminalNode(node);
-		if (temp == 1) {
+		if (temp == 1 && maximizingPlayer == false) {
 		    return 99;
-        } else if (temp == -1) {
-		    return 0;
-        }
+        } else if (temp == 1 && maximizingPlayer == true) {
+			return -99;
+		}
+//        else if (temp == -1) {
+//		    return 0;
+//        }
 
 		if(maximizingPlayer) {
 			value = -999;

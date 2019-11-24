@@ -6,7 +6,7 @@ public class runTicTacToe {
 	private List<List<positionTicTacToe>>  winningLines = new ArrayList<>(); 
 	private List<positionTicTacToe> board = new ArrayList<>();
 	private aiTicTacToeZhu ai1;
-	private aiTicTacToeZhu ai2;
+	private aiTicTacToe ai2;
 	
 	public int result;
 	public runTicTacToe()
@@ -18,7 +18,7 @@ public class runTicTacToe {
 		
 		//initialize AI players
 		ai1 = new aiTicTacToeZhu(1);
-		ai2 = new aiTicTacToeZhu(2);
+		ai2 = new aiTicTacToe(2);
 	}
 	private List<positionTicTacToe> createTicTacToeBoard()
 	{
@@ -326,13 +326,13 @@ public class runTicTacToe {
 		{
 			if(turn==1)
 			{
-				positionTicTacToe player1NextMove = ai1.myAIAlgorithmZhu(board,1); //1 stands for player 1
+				positionTicTacToe player1NextMove = ai1.myAIAlgorithmRandom(board,1); //1 stands for player 1
 				if(makeMove(player1NextMove,1,board))
 					turn = 2;
 			}
 			else if(turn==2)
 			{
-				positionTicTacToe player2NextMove = ai2.myAIAlgorithmRandom(board,2); //2 stands for player 2
+				positionTicTacToe player2NextMove = ai2.myAIAlgorithm(board,2); //2 stands for player 2
 				//System.out.println(java.time.LocalDate.now());
 				if(makeMove(player2NextMove,2,board))
 					turn = 1;
@@ -380,7 +380,7 @@ public class runTicTacToe {
 
 		//run game loop
 		runTicTacToe rttt = new runTicTacToe();
-		for(int i = 0; i < 1; i++) {
+		for(int i = 0; i < 10; i++) {
 			rttt.run();
 		}
 	}
