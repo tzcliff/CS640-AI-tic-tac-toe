@@ -15,22 +15,8 @@ public class aiTicTacToe {
 		//TODO: this is where you are going to implement your AI algorithm to win the game. The default is an AI randomly choose any available move.
 		//positionTicTacToe myNextMove = new positionTicTacToe(0,0,0);
 		index = 0;
-		alphabeta(board, 4, -999, 999, true, player);
+		alphabeta(board, 5, -999, 999, true, player);
 		positionTicTacToe myNextMove = indexToPosition(index);
-
-
-
-
-		
-//		do
-//			{
-//				Random rand = new Random();
-//				int x = rand.nextInt(4);
-//				int y = rand.nextInt(4);
-//				int z = rand.nextInt(4);
-//				myNextMove = new positionTicTacToe(x,y,z);
-//			}while(getStateOfPositionFromBoard(myNextMove,board)!=0);
-//		return myNextMove;
 
 		return myNextMove;
 
@@ -232,7 +218,7 @@ public class aiTicTacToe {
 		return numberOfWinningLines;
 	}
 
-	private boolean isTerminalNode(List<positionTicTacToe> board)
+	private int isTerminalNode(List<positionTicTacToe> board)
 	{
 		//test whether the current game is ended
 
@@ -256,7 +242,7 @@ public class aiTicTacToe {
 
 
 
-				return true;
+				return 1;
 			}
 		}
 		for(int i=0;i<board.size();i++)
@@ -264,10 +250,10 @@ public class aiTicTacToe {
 			if(board.get(i).state==0)
 			{
 				//game is not ended, continue
-				return false;
+				return 0;
 			}
 		}
-		return true; //call it a draw
+		return -1; //call it a draw
 	}
 
 	private List<positionTicTacToe> deepCopyATicTacToeBoard(List<positionTicTacToe> board)
@@ -292,9 +278,15 @@ public class aiTicTacToe {
 		} else {
 			opponent = 1;
 		}
-		if(depth == 0 || isTerminalNode(node) ) {
+		if(depth == 0  ) {
 			return caculateWinningLines(node, player);
 		}
+        int temp = isTerminalNode(node);
+		if (temp == 1) {
+		    return 99;
+        } else if (temp == -1) {
+		    return 0;
+        }
 
 		if(maximizingPlayer) {
 			value = -999;
