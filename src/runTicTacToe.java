@@ -5,7 +5,7 @@ public class runTicTacToe {
 	
 	private List<List<positionTicTacToe>>  winningLines = new ArrayList<>(); 
 	private List<positionTicTacToe> board = new ArrayList<>();
-	private aiTicTacToeZhu ai1;
+	private aiTicTacToe ai1;
 	private aiTicTacToe ai2;
 	
 	public int result;
@@ -17,7 +17,7 @@ public class runTicTacToe {
 		board = createTicTacToeBoard();
 		
 		//initialize AI players
-		ai1 = new aiTicTacToeZhu(1);
+		ai1 = new aiTicTacToe(1);
 		ai2 = new aiTicTacToe(2);
 	}
 	private List<positionTicTacToe> createTicTacToeBoard()
@@ -326,13 +326,13 @@ public class runTicTacToe {
 		{
 			if(turn==1)
 			{
-				positionTicTacToe player1NextMove = ai1.myAIAlgorithmRandom(board,1); //1 stands for player 1
+				positionTicTacToe player1NextMove = ai1.myAIAlgorithm(board,1); //1 stands for player 1
 				if(makeMove(player1NextMove,1,board))
 					turn = 2;
 			}
 			else if(turn==2)
 			{
-				positionTicTacToe player2NextMove = ai2.myAIAlgorithm(board,2); //2 stands for player 2
+				positionTicTacToe player2NextMove = ai2.myAIAlgorithmRandom(board,2); //2 stands for player 2
 				if(makeMove(player2NextMove,2,board))
 					turn = 1;
 			}
@@ -348,19 +348,19 @@ public class runTicTacToe {
 		{
 			//game ends, player 1 wins 
 			System.out.println("Player1 Wins");
-			//printBoardTicTacToe(board);
+			printBoardTicTacToe(board);
 		}
 		else if(result==2)
 		{
 			//game ends, player 1 wins 
 			System.out.println("Player2 Wins");
-			//printBoardTicTacToe(board);
+			printBoardTicTacToe(board);
 		}
 		else if(result==-1)
 		{
 			//game ends, it's a draw 
 			System.out.println("This is a draw.");
-			//printBoardTicTacToe(board);
+			printBoardTicTacToe(board);
 		}
 		else
 		{
@@ -377,12 +377,8 @@ public class runTicTacToe {
 	public static void main(String[] args) {		
 
 		//run game loop
-
 		runTicTacToe rttt = new runTicTacToe();
-		for(int i = 0; i < 50; i++){
-			rttt.run();
-		}
-
+		rttt.run();
 	}
 }
 
