@@ -342,24 +342,22 @@ public class aiTicTacToeZhu {
 					if(myCount >= 2){
 						if(myCount >= 3){
 							if(myCount == 4){
-								result = Math.max(result, 100);
-								break;
+								result += 100;
 							}
-							result = Math.max(result, 70);
+							result += 50;
 						}
-						result = Math.max(result, 40);
+						result += 30;
 					}
-					result = Math.max(result, 5);
+					result += 5;
 				}
 				if(enemyCount >= 1){
 					if(enemyCount >= 2){
 						if(enemyCount >= 3){
-							result = Math.max(result, 80);
-							break;
+							result += 80;
 						}
-						result = Math.max(result, 12);
+						result += 12;
 					}
-					result = Math.max(result, 3);
+					result += 3;
 				}
 			}
 		}
@@ -373,7 +371,7 @@ public class aiTicTacToeZhu {
 			if(pos.state == player){
 				int myCount = countMaxConsecutive(board, pos, player);
 				if(myCount >= 4){
-					result = Math.max(result, 100);
+					result += 200;
 					break;
 				}
 			}
