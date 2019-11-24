@@ -1,5 +1,5 @@
 import java.util.*;
-public class aiTicTacToe {
+public class aiTicTacToeZhu {
 
 	public int player; //1 for player 1 and 2 for player 2
 	private List<List<positionTicTacToe>> winningLines;
@@ -10,33 +10,18 @@ public class aiTicTacToe {
 		int index = position.x*16+position.y*4+position.z;
 		return board.get(index).state;
 	}
-	public positionTicTacToe myAIAlgorithm(List<positionTicTacToe> board, int player)
+	public positionTicTacToe myAIAlgorithmZhu(List<positionTicTacToe> board, int player)
 	{
 		//TODO: this is where you are going to implement your AI algorithm to win the game. The default is an AI randomly choose any available move.
 		//positionTicTacToe myNextMove = new positionTicTacToe(0,0,0);
 		index = 0;
-		alphabeta(board, 5, -999, 999, true, player);
+		alphabeta(board, 5, Integer.MIN_VALUE, Integer.MAX_VALUE, true, player);
 		positionTicTacToe myNextMove = indexToPosition(index);
 
-
-
-
-		
-//		do
-//			{
-//				Random rand = new Random();
-//				int x = rand.nextInt(4);
-//				int y = rand.nextInt(4);
-//				int z = rand.nextInt(4);
-//				myNextMove = new positionTicTacToe(x,y,z);
-//			}while(getStateOfPositionFromBoard(myNextMove,board)!=0);
-//		return myNextMove;
 
 		return myNextMove;
 
 
-			
-		
 	}
 
 	public positionTicTacToe myAIAlgorithmRandom(List<positionTicTacToe> board, int player) {
@@ -189,13 +174,13 @@ public class aiTicTacToe {
 		return winningLines;
 		
 	}
-	public aiTicTacToe(int setPlayer)
+	public aiTicTacToeZhu(int setPlayer)
 	{
 		winningLines = initializeWinningLines();
 		player = setPlayer;
 	}
 
-	private int caculateWinningLines(List<positionTicTacToe> board, int player) {
+	private int calculateWinningLines(List<positionTicTacToe> board, int player) {
 
 		int opponent;
 
@@ -207,7 +192,7 @@ public class aiTicTacToe {
 
 		int numberOfWinningLines = 0;
 
-		for (int i=0;i<winningLines.size();i++)
+		for (int i = 0;i < winningLines.size();i++)
 		{
 
 			positionTicTacToe p0 = winningLines.get(i).get(0);
@@ -237,7 +222,7 @@ public class aiTicTacToe {
 		//test whether the current game is ended
 
 		//brute-force
-		for(int i=0;i<winningLines.size();i++)
+		for(int i = 0;i < winningLines.size();i++)
 		{
 
 			positionTicTacToe p0 = winningLines.get(i).get(0);
@@ -253,15 +238,12 @@ public class aiTicTacToe {
 			//if they have the same state (marked by same player) and they are not all marked.
 			if(state0 == state1 && state1 == state2 && state2 == state3 && state0!=0)
 			{
-
-
-
 				return 1;
 			}
 		}
-		for(int i=0;i<board.size();i++)
+		for(int i = 0;i < board.size();i++)
 		{
-			if(board.get(i).state==0)
+			if(board.get(i).state == 0)
 			{
 				//game is not ended, continue
 				return 0;
@@ -285,30 +267,36 @@ public class aiTicTacToe {
 		int value;
 
 		int opponent;
-
-
 		if(player == 1) {
 			opponent = 2;
 		} else {
 			opponent = 1;
 		}
-		if(depth == 0  ) {
-			return caculateWinningLines(node, player);
+
+		int flag = isTerminalNode(node);
+		if(flag != 0){
+			int result = calculateWinningLines(node, player) * 100;
+			if(flag == 1){
+				int temp = calculateTerminalValue(node, player);
+				result += temp;
+				return result;
+			}
 		}
-        int temp = isTerminalNode(node);
-		if (temp == 1) {
-		    return 99;
-        } else if (temp == -1) {
-		    return 0;
-        }
+		if(depth == 0) { // results are unknown. value needs to be set.
+
+			int result = calculateWinningLines(node, player) * 150;
+			int temp = calculateHeuristicValue(node, player);
+			result += temp;
+
+			return result;
+		}
 
 		if(maximizingPlayer) {
-			value = -999;
+			value = Integer.MIN_VALUE;
 			for (int i = 0; i < node.size(); i++) {
 				if (node.get(i).state == 0) {
 					List<positionTicTacToe> child = deepCopyATicTacToeBoard(node);
 					child.get(i).state = player;
-					//value = Math.max(value, alphabeta(child, depth-1, a, b, false, opponent));
 					int newValue = alphabeta(child, depth-1, a, b, false, opponent);
 					if (newValue > value) {
 						value = newValue;
@@ -325,18 +313,12 @@ public class aiTicTacToe {
 			return value;
 		}
 		else {
-			value = 999;
+			value = Integer.MAX_VALUE;
 			for (int i = 0; i < node.size(); i++) {
 				if (node.get(i).state == 0) {
 					List<positionTicTacToe> child = deepCopyATicTacToeBoard(node);
 					child.get(i).state = player;
 					value = Math.min(value, alphabeta(child, depth-1, a, b, true, opponent));
-//					int newValue = alphabeta(child, depth-1, a, b, true, opponent);
-//					if (newValue < value) {
-//						value = newValue;
-//						index = i;
-//
-//					}
 					b = Math.min(b, value);
 					if (a >= b) {
 						break;
@@ -348,6 +330,168 @@ public class aiTicTacToe {
 
 		}
 	}
+	public int calculateHeuristicValue(List<positionTicTacToe> board, int player){
+		int opponent = player == 1 ? 2 : 1;
+		int result = 0;
+		for(positionTicTacToe pos : board){
+			if(pos.state == player){
+				int myCount = countMaxConsecutive(board, pos, player);
+				int enemyCount = countMaxConsecutive(board, pos, opponent);
+
+				if(myCount >= 1){
+					if(myCount >= 2){
+						if(myCount >= 3){
+							if(myCount == 4){
+								result = Math.max(result, 500000);
+								break;
+							}
+							result = Math.max(result, 70000);
+						}
+						result = Math.max(result, 40000);
+					}
+					result = Math.max(result, 15000);
+				}
+
+				if(enemyCount >= 1){
+					if(enemyCount >= 2){
+						if(enemyCount >= 3){
+							result = Math.max(result, 130000);
+							break;
+						}
+						result = Math.max(result, 30000);
+					}
+					result = Math.max(result, 10000);
+				}
+
+
+			}
+		}
+		return result;
+	}
+
+	public int calculateTerminalValue(List<positionTicTacToe> board, int player){
+		int opponent = player == 1 ? 2 : 1;
+		int result = 0;
+		for(positionTicTacToe pos : board){
+			if(pos.state == player){
+				int myCount = countMaxConsecutive(board, pos, player);
+				if(myCount >= 4){
+					result = Math.max(result, 1000000);
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
+
+	public int countMaxConsecutive(List<positionTicTacToe> board, positionTicTacToe pos, int player){
+		int max = Integer.MIN_VALUE;
+		int count = 0;
+		for(int x = 0; x < 4; x++) {
+			if (x == pos.x) {
+				continue;
+			} else {
+				positionTicTacToe newPos = new positionTicTacToe(x, pos.y, pos.z);
+				int index = positionToIndex(newPos);
+				if (board.get(index).state == player) {
+					count++;
+				}
+			}
+		}
+		max = Math.max(max, count);
+		count = 0;
+		for(int y = 0; y < 4; y++){
+			if(y == pos.y){
+				count++;
+			}
+			else {
+				positionTicTacToe newPos = new positionTicTacToe(pos.x, y, pos.z);
+				int index = positionToIndex(newPos);
+				if(board.get(index).state == player){
+					count++;
+				}
+			}
+		}
+		max = Math.max(max, count);
+		count = 0;
+		for(int z = 0; z < 4; z++){
+			if(z == pos.z){
+				count++;
+			}
+			else {
+				positionTicTacToe newPos = new positionTicTacToe(pos.x, pos.y, z);
+				int index = positionToIndex(newPos);
+				if(board.get(index).state == player){
+					count++;
+				}
+			}
+		}
+		max = Math.max(max, count);
+
+		if(pos.x == pos.y){
+			count = 0;
+			for(int i = 0; i < 4; i++) {
+				if (i == pos.x) {
+					count++;
+				} else {
+					positionTicTacToe newPos = new positionTicTacToe(i, i, pos.z);
+					int index = positionToIndex(newPos);
+					if (board.get(index).state == player) {
+						count++;
+					}
+				}
+			}
+			max = Math.max(max, count);
+		}
+		if(pos.x == pos.z){
+			count = 0;
+			for(int i = 0; i < 4; i++) {
+				if (i == pos.x) {
+					count++;
+				} else {
+					positionTicTacToe newPos = new positionTicTacToe(i, pos.y, i);
+					int index = positionToIndex(newPos);
+					if (board.get(index).state == player) {
+						count++;
+					}
+				}
+			}
+			max = Math.max(max, count);
+		}
+		if(pos.y == pos.z){
+			count = 0;
+			for(int i = 0; i < 4; i++) {
+				if (i == pos.y) {
+					count++;
+				} else {
+					positionTicTacToe newPos = new positionTicTacToe(pos.x, i, i);
+					int index = positionToIndex(newPos);
+					if (board.get(index).state == player) {
+						count++;
+					}
+				}
+			}
+			max = Math.max(max, count);
+		}
+		if(pos.x == pos.y && pos.x == pos.z){
+			count = 0;
+			for(int i = 0; i < 4; i++) {
+				if (i == pos.y) {
+					count++;
+				} else {
+					positionTicTacToe newPos = new positionTicTacToe(i, i, i);
+					int index = positionToIndex(newPos);
+					if (board.get(index).state == player) {
+						count++;
+					}
+				}
+			}
+			max = Math.max(max, count);
+		}
+		return max;
+	}
+
 
 	private positionTicTacToe indexToPosition (int index) {
 			int x = index / 16;
@@ -355,6 +499,13 @@ public class aiTicTacToe {
 			int z = (index % 16) % 4;
 
 			return new positionTicTacToe(x, y, z);
+	}
+	private int positionToIndex(positionTicTacToe pos){
+		int result = 0;
+		result += pos.x * 16;
+		result += pos.y * 4;
+		result += pos.z;
+		return result;
 	}
 
 
