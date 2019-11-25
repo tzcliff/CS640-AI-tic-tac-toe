@@ -287,16 +287,15 @@ public class aiTicTacToeZhu1 {
 			return 99999;
 		} else if (temp == 1 && maximizingPlayer == true) {
 			return -99999;
-		} else if (temp == -1) {
-			return 0;
 		}
+
 		if(depth == 0) { // results are unknown. value needs to be set.
 
-			int result = calculateWinningLines(node, player);
+			//int result = calculateWinningLines(node, player);
 			int temp1 = calculateHeuristicValue(node, player);
-			result += temp1;
+			//result += temp1;
 
-			return result;
+			return temp1;
 		}
 
 		if(maximizingPlayer) {
@@ -352,18 +351,18 @@ public class aiTicTacToeZhu1 {
 							/*if(myCount == 4){
 								result += 120;
 							}*/
-							result += 30;
+							result += 70;
 						}
-						result += 10;
+						result += 20;
 					}
 					result += 5;
 				}
 				if(enemyCount >= 1){
 					if(enemyCount >= 2){
 						if(enemyCount >= 3){
-							result += 600;
+							result += 200;
 						}
-						result += 80;
+						result += 10;
 					}
 					result += 3;
 				}

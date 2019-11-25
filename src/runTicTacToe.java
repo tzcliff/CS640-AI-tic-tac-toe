@@ -5,7 +5,7 @@ public class runTicTacToe {
 	
 	private List<List<positionTicTacToe>>  winningLines = new ArrayList<>(); 
 	private List<positionTicTacToe> board = new ArrayList<>();
-	private aiTicTacToeZhu ai1;
+	private aiTicTacToe ai1;
 	private aiTicTacToeZhu1 ai2;
 	
 	public int result;
@@ -17,7 +17,7 @@ public class runTicTacToe {
 		board = createTicTacToeBoard();
 		
 		//initialize AI players
-		ai1 = new aiTicTacToeZhu(1);
+		ai1 = new aiTicTacToe(1);
 		ai2 = new aiTicTacToeZhu1(2);
 	}
 	private List<positionTicTacToe> createTicTacToeBoard()
@@ -320,13 +320,13 @@ public class runTicTacToe {
 	{
 
 		Random rand = new Random();
-		int turn = rand.nextInt(2)+1; //1 = player1's turn, 2 = player2's turn, who go first is randomized 
+		int turn = 1; //1 = player1's turn, 2 = player2's turn, who go first is randomized
 		
 		while((result = isEnded())==0) //game loop
 		{
 			if(turn==1)
 			{
-				positionTicTacToe player1NextMove = ai1.myAIAlgorithmZhu(board,1); //1 stands for player 1
+				positionTicTacToe player1NextMove = ai1.myAIAlgorithmRandom(board,1); //1 stands for player 1
 				if(makeMove(player1NextMove,1,board))
 					turn = 2;
 			}

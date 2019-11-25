@@ -350,11 +350,10 @@ public class aiTicTacToeZhu {
 					if(myCount >= 2){
 						if(myCount >= 3){
 							if(myCount == 4){
-								result += 100;
 							}
-							result += 50;
+							result += 30;
 						}
-						result += 30;
+						result += 20;
 					}
 					result += 5;
 				}
