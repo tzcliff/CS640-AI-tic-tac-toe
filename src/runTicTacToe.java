@@ -326,7 +326,7 @@ public class runTicTacToe {
 		{
 			if(turn==1)
 			{
-				positionTicTacToe player1NextMove = ai1.myAIAlgorithmRandom(board,1); //1 stands for player 1
+				positionTicTacToe player1NextMove = ai1.myAIAlgorithmZhu(board,1); //1 stands for player 1
 				if(makeMove(player1NextMove,1,board))
 					turn = 2;
 			}
@@ -380,7 +380,7 @@ public class runTicTacToe {
 
 		//run game loop
 		runTicTacToe rttt = new runTicTacToe();
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 1; i++) {
 			rttt.run();
 		}
 	}

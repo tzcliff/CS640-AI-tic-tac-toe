@@ -286,6 +286,8 @@ public class aiTicTacToe {
 		    return 99;
         } else if (temp == 1 && maximizingPlayer == true) {
 			return -99;
+		} else if (temp == -1) {
+			return 0;
 		}
 //        else if (temp == -1) {
 //		    return 0;

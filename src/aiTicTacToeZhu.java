@@ -15,7 +15,7 @@ public class aiTicTacToeZhu {
 		//TODO: this is where you are going to implement your AI algorithm to win the game. The default is an AI randomly choose any available move.
 		//positionTicTacToe myNextMove = new positionTicTacToe(0,0,0);
 		index = 0;
-		alphabeta(board, 5, Integer.MIN_VALUE, Integer.MAX_VALUE, true, player);
+		alphabeta(board, 4, Integer.MIN_VALUE, Integer.MAX_VALUE, true, player);
 		positionTicTacToe myNextMove = indexToPosition(index);
 
 
@@ -273,7 +273,7 @@ public class aiTicTacToeZhu {
 			opponent = 1;
 		}
 
-		int flag = isTerminalNode(node);
+		/*int flag = isTerminalNode(node);
 		if(flag != 0){
 			int result = calculateWinningLines(node, player);
 			if(flag == 1){
@@ -281,12 +281,20 @@ public class aiTicTacToeZhu {
 				result += temp;
 				return result;
 			}
+		}*/
+		int temp = isTerminalNode(node);
+		if (temp == 1 && maximizingPlayer == false) {
+			return 99999;
+		} else if (temp == 1 && maximizingPlayer == true) {
+			return -99999;
+		} else if (temp == -1) {
+			return 0;
 		}
 		if(depth == 0) { // results are unknown. value needs to be set.
 
 			int result = calculateWinningLines(node, player);
-			int temp = calculateHeuristicValue(node, player);
-			result += temp;
+			int temp1 = calculateHeuristicValue(node, player);
+			result += temp1;
 
 			return result;
 		}
